@@ -18,7 +18,6 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Clipboard from '@react-native-clipboard/clipboard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const BaseURL = 'https://icanhazdadjoke.com/';
 
 const App = () => {
@@ -293,54 +292,76 @@ const App = () => {
           {text}
         </Text>
       </ScrollView>
-      <View style={{flex: 0.8, top: '1%'}}>
-        <TouchableOpacity
-          style={[styles.button, {backgroundColor: '#f1c40f'}]}
-          onPress={() => {
-            RandomGenerator();
+      <View style={{flex: 0.2, top: '1%'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginVertical: 20,
+            top: '5%',
           }}>
-          <Text style={{color: 'black', fontWeight: 'bold'}}>Generate</Text>
-          <FontAwesome5Icon name="random" size={30} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, {backgroundColor: '#acecf7'}]}
-          onPress={() => {
-            AddItem();
-          }}>
-          <Text style={{color: 'black', fontWeight: 'bold', bottom: 1}}>
-            Save to registry
-          </Text>
-          <FontAwesomeIcon name="save" size={30} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, {backgroundColor: '#BCF7C9'}]}
-          onPress={() => {
-            if (text.length > 0) {
-              ShareMessage(text);
-            } else Alert.alert('Warning', 'Please generate a joke first.');
-          }}>
-          <Text
-            style={{color: 'black', fontWeight: 'bold', margin: 2, bottom: 2}}>
-            Share
-          </Text>
-          <EntypoIcon name="share" size={30} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, {backgroundColor: '#f4989c'}]}
-          onPress={() => {
-            setModalVisible(true);
-          }}>
-          <Text
-            style={{
-              color: 'black',
-              fontWeight: 'bold',
-              marginVertical: 5,
-              bottom: 5,
+          <TouchableOpacity
+            style={[styles.button, {backgroundColor: '#f1c40f', right: '15%'}]}
+            onPress={() => {
+              RandomGenerator();
             }}>
-            Registry
-          </Text>
-          <FontAwesome5Icon name="history" size={25} color="black" />
-        </TouchableOpacity>
+            <Text style={{color: 'black', fontWeight: 'bold'}}>Generate</Text>
+            <FontAwesome5Icon name="random" size={30} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, {backgroundColor: '#acecf7', left: '15%'}]}
+            onPress={() => {
+              AddItem();
+            }}>
+            <Text style={{color: 'black', fontWeight: 'bold', bottom: 1}}>
+              Save to registry
+            </Text>
+            <FontAwesomeIcon name="save" size={30} color="black" />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginVertical: 30,
+          }}>
+          <TouchableOpacity
+            style={[styles.button, {backgroundColor: '#BCF7C9', right: '15%'}]}
+            onPress={() => {
+              if (text.length > 0) {
+                ShareMessage(text);
+              } else Alert.alert('Warning', 'Please generate a joke first.');
+            }}>
+            <Text
+              style={{
+                color: 'black',
+                fontWeight: 'bold',
+                margin: 2,
+                bottom: 2,
+              }}>
+              Share
+            </Text>
+            <EntypoIcon name="share" size={30} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, {backgroundColor: '#f4989c', left: '15%'}]}
+            onPress={() => {
+              setModalVisible(true);
+            }}>
+            <Text
+              style={{
+                color: 'black',
+                fontWeight: 'bold',
+                marginVertical: 5,
+                bottom: 5,
+              }}>
+              Registry
+            </Text>
+            <FontAwesome5Icon name="history" size={25} color="black" />
+          </TouchableOpacity>
+        </View>
       </View>
       <RegistryModal style={{flex: 1}} />
     </SafeAreaView>
