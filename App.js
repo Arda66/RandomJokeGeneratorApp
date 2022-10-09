@@ -42,7 +42,7 @@ const App = () => {
     GetData();
   }, []);
 
-  const ShareMessage = () => {
+  const ShareMessage = text => {
     const shareOptions = {
       title: 'Share via',
       message: text,
@@ -62,8 +62,34 @@ const App = () => {
           flex: 1,
           margin: 10,
           flexDirection: 'row',
+          borderBottomWidth: 0.3,
+          borderBottomColor: 'gray',
         }}>
         <Text
+          onLongPress={() => {
+            Alert.alert(
+              'Joke',
+              item,
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {
+                  text: 'Copy',
+                  onPress: () => {
+                    ToastAndroid.show(
+                      'Copied to clipboard.',
+                      ToastAndroid.SHORT,
+                    );
+                    Clipboard.setString(text);
+                  },
+                },
+              ],
+              {cancelable: false},
+            );
+          }}
           style={{
             fontSize: 20,
             fontWeight: 'bold',
@@ -72,56 +98,72 @@ const App = () => {
             width: '95%',
             marginVertical: 10,
             lineHeight: 30,
-            borderBottomWidth: 0.2,
-            borderBottomColor: 'gray',
             padding: 5,
           }}>
           {index + 1}-) {item}
         </Text>
-        <TouchableOpacity
+        <View
           style={{
             position: 'absolute',
-            right: -15,
+            right: -20,
             top: 0,
             bottom: 0,
             justifyContent: 'center',
             alignItems: 'center',
             padding: 10,
-          }}
-          onPress={() => {
-            Alert.alert(
-              'Delete',
-              'Are you sure you want to delete this joke?',
-              [
-                {
-                  text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
-                },
-                {
-                  text: 'Yes',
-                  onPress: async () => {
-                    const temp = Registry;
-                    temp.splice(index, 1);
-                    setRegistry(temp);
-                    await AsyncStorage.setItem(
-                      'RegistryArray',
-                      JSON.stringify(temp),
-                    );
-
-                    setExtraData(!ExtraData);
-                    ToastAndroid.show(
-                      'Joke has been deleted.',
-                      ToastAndroid.SHORT,
-                    );
-                  },
-                },
-              ],
-              {cancelable: false},
-            );
+            flexDirection: 'column',
           }}>
-          <FontAwesomeIcon name="trash" size={35} color="red" />
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              Alert.alert(
+                'Delete',
+                'Are you sure you want to delete this joke?',
+                [
+                  {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'Yes',
+                    onPress: async () => {
+                      const temp = Registry;
+                      temp.splice(index, 1);
+                      setRegistry(temp);
+                      await AsyncStorage.setItem(
+                        'RegistryArray',
+                        JSON.stringify(temp),
+                      );
+                      setExtraData(!ExtraData);
+                      ToastAndroid.show(
+                        'Joke has been deleted.',
+                        ToastAndroid.SHORT,
+                      );
+                    },
+                  },
+                ],
+                {cancelable: false},
+              );
+            }}>
+            <FontAwesomeIcon
+              name="trash"
+              size={35}
+              color="red"
+              style={{bottom: 20}}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              ShareMessage(item);
+            }}>
+            <EntypoIcon
+              name="share"
+              size={35}
+              color="green"
+              style={{bottom: 5}}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -189,7 +231,6 @@ const App = () => {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginVertical: 10,
         backgroundColor: '#F5F5F5',
       }}>
       <Text
@@ -269,7 +310,7 @@ const App = () => {
         style={[styles.button, {backgroundColor: 'green'}]}
         onPress={() => {
           if (text.length > 0) {
-            ShareMessage();
+            ShareMessage(text);
           } else Alert.alert('Warning', 'Please generate a joke first.');
         }}>
         <Text
