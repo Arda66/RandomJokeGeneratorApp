@@ -3,11 +3,13 @@ import React, {useEffect, useState} from 'react';
 import {
   Alert,
   FlatList,
+  KeyboardAvoidingView,
   Modal,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   ToastAndroid,
   TouchableOpacity,
   View,
@@ -22,6 +24,7 @@ const BaseURL = 'https://icanhazdadjoke.com/';
 
 const App = () => {
   const [text, setText] = useState('');
+  const [SearchText, setSearchText] = useState('');
   const [ModalVisible, setModalVisible] = useState(false);
   const [Registry, setRegistry] = useState([]);
   const [ExtraData, setExtraData] = useState(false);
@@ -87,10 +90,12 @@ const App = () => {
         {
           text: 'Yes',
           onPress: async () => {
-            const temp = Registry;
-            temp.splice(index, 1);
-            setRegistry(temp);
-            await AsyncStorage.setItem('RegistryArray', JSON.stringify(temp));
+            Registry.splice(index, 1);
+            setRegistry(Registry);
+            await AsyncStorage.setItem(
+              'RegistryArray',
+              JSON.stringify(Registry),
+            );
             setExtraData(!ExtraData);
             ToastAndroid.show('Joke has been deleted.', ToastAndroid.SHORT);
           },
@@ -191,6 +196,22 @@ const App = () => {
     });
     setText(response.data.joke);
   };
+  const SearchJoke = async () => {
+    if (SearchText.length > 0) {
+      const response = await axios.get(`${BaseURL}search?term=${SearchText}`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+      if (response.data.results.length > 0) {
+        setText(response.data.results[0].joke);
+      } else {
+        Alert.alert('Warning', 'No joke found.');
+      }
+    } else {
+      Alert.alert('Warning', 'Please enter a search term.');
+    }
+  };
   const RegistryModal = () => {
     return (
       <SafeAreaView style={{flex: 1}}>
@@ -255,7 +276,14 @@ const App = () => {
         backgroundColor: '#ebd2b4',
       }}>
       <ScrollView
-        style={{flex: 1, width: '92%', marginVertical: 10, top: '2%'}}>
+        style={{
+          flex: 1,
+          width: '92%',
+          marginVertical: 10,
+          borderColor: 'gray',
+          elevation: 3,
+          paddingHorizontal: 10,
+        }}>
         <Text
           onLongPress={() => {
             Alert.alert(
@@ -284,15 +312,52 @@ const App = () => {
           style={{
             fontWeight: 'bold',
             color: 'black',
-            fontSize: 22,
+            fontSize: 23,
             letterSpacing: 1,
-            lineHeight: 32,
+            lineHeight: 40,
             top: '2%',
           }}>
           {text}
         </Text>
       </ScrollView>
-      <View style={{flex: 0.2, top: '1%'}}>
+      <View style={{flex: 0.3, top: '1%'}}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+          }}>
+          <TextInput
+            numberOfLines={1}
+            placeholder="Type your search term here..."
+            value={SearchText}
+            onChangeText={text => {
+              setSearchText(text);
+            }}
+            style={{
+              minWidth: '90%',
+              maxWidth: '90%',
+              backgroundColor: 'white',
+              borderRadius: 10,
+              marginVertical: 10,
+              elevation: 3,
+              borderWidth: 1,
+              borderColor: 'black',
+            }}></TextInput>
+          <TouchableOpacity
+            onPress={() => {
+              SearchJoke();
+              setSearchText('');
+            }}>
+            <FontAwesomeIcon
+              style={{left: '40%', bottom: '155%', padding: 2}}
+              name="search"
+              size={28}
+              color="blue"
+            />
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
         <View
           style={{
             flexDirection: 'row',
@@ -306,7 +371,9 @@ const App = () => {
             onPress={() => {
               RandomGenerator();
             }}>
-            <Text style={{color: 'black', fontWeight: 'bold'}}>Generate</Text>
+            <Text style={{color: 'black', fontWeight: 'bold'}}>
+              Random Generate
+            </Text>
             <FontAwesome5Icon name="random" size={30} color="black" />
           </TouchableOpacity>
           <TouchableOpacity
