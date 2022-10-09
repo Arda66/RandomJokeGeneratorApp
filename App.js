@@ -39,6 +39,7 @@ const App = () => {
   };
 
   useEffect(() => {
+    RandomGenerator();
     GetData();
   }, []);
 
@@ -54,6 +55,49 @@ const App = () => {
       .catch(err => {
         err && console.log(err);
       });
+  };
+  const AddItem = async () => {
+    if (text.length > 0) {
+      if (Registry.includes(text)) {
+        Alert.alert('Warning', 'This joke is already saved in the registry.');
+      } else {
+        const temp = Registry;
+        temp.push(text);
+        setRegistry(temp);
+        await AsyncStorage.setItem('RegistryArray', JSON.stringify(temp)).catch(
+          err => {
+            console.log(err);
+          },
+        );
+        setExtraData(!ExtraData);
+        ToastAndroid.show('Joke has been saved.', ToastAndroid.SHORT);
+      }
+    } else Alert.alert('Warning', 'Please generate a joke first.');
+  };
+  const DeleteItem = index => {
+    Alert.alert(
+      'Delete',
+      'Are you sure you want to delete this joke?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: async () => {
+            const temp = Registry;
+            temp.splice(index, 1);
+            setRegistry(temp);
+            await AsyncStorage.setItem('RegistryArray', JSON.stringify(temp));
+            setExtraData(!ExtraData);
+            ToastAndroid.show('Joke has been deleted.', ToastAndroid.SHORT);
+          },
+        },
+      ],
+      {cancelable: false},
+    );
   };
   const renderItem = ({item, index}) => {
     return (
@@ -115,35 +159,7 @@ const App = () => {
           }}>
           <TouchableOpacity
             onPress={() => {
-              Alert.alert(
-                'Delete',
-                'Are you sure you want to delete this joke?',
-                [
-                  {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                  },
-                  {
-                    text: 'Yes',
-                    onPress: async () => {
-                      const temp = Registry;
-                      temp.splice(index, 1);
-                      setRegistry(temp);
-                      await AsyncStorage.setItem(
-                        'RegistryArray',
-                        JSON.stringify(temp),
-                      );
-                      setExtraData(!ExtraData);
-                      ToastAndroid.show(
-                        'Joke has been deleted.',
-                        ToastAndroid.SHORT,
-                      );
-                    },
-                  },
-                ],
-                {cancelable: false},
-              );
+              DeleteItem(index);
             }}>
             <FontAwesomeIcon
               name="trash"
@@ -188,12 +204,17 @@ const App = () => {
             setModalVisible(false);
           }}>
           <SafeAreaView
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#E6DDBA',
+            }}>
             <Text
               style={{
                 fontWeight: 'bold',
-                color: 'red',
-                fontSize: 30,
+                color: '#9A2262',
+                fontSize: 33,
                 padding: 10,
               }}>
               Saved Jokes
@@ -231,7 +252,7 @@ const App = () => {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#ebd2b4',
       }}>
       <Text
         onLongPress={() => {
@@ -276,30 +297,9 @@ const App = () => {
         <FontAwesome5Icon name="random" size={30} color="black" />
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.button, {backgroundColor: 'cyan'}]}
-        onPress={async () => {
-          if (text.length > 0) {
-            if (Registry.includes(text)) {
-              Alert.alert(
-                'Warning',
-                'This joke is already saved in the registry.',
-              );
-            } else {
-              // setRegistry([...Registry, text]);
-              const temp = Registry;
-              temp.push(text);
-              setRegistry(temp);
-              await AsyncStorage.setItem(
-                'RegistryArray',
-                JSON.stringify(temp),
-              ).catch(err => {
-                console.log(err);
-              });
-              setExtraData(!ExtraData);
-
-              ToastAndroid.show('Joke has been saved.', ToastAndroid.SHORT);
-            }
-          } else Alert.alert('Warning', 'Please generate a joke first.');
+        style={[styles.button, {backgroundColor: '#acecf7'}]}
+        onPress={() => {
+          AddItem();
         }}>
         <Text style={{color: 'black', fontWeight: 'bold', bottom: 1}}>
           Save to registry
@@ -307,7 +307,7 @@ const App = () => {
         <FontAwesomeIcon name="save" size={30} color="black" />
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.button, {backgroundColor: 'green'}]}
+        style={[styles.button, {backgroundColor: '#BCF7C9'}]}
         onPress={() => {
           if (text.length > 0) {
             ShareMessage(text);
@@ -320,7 +320,7 @@ const App = () => {
         <EntypoIcon name="share" size={30} color="black" />
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.button, {backgroundColor: 'pink'}]}
+        style={[styles.button, {backgroundColor: '#f4989c'}]}
         onPress={() => {
           setModalVisible(true);
         }}>
