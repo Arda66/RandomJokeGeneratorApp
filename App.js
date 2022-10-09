@@ -233,13 +233,13 @@ const App = () => {
                 height: 60,
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: '#FC8389',
+                backgroundColor: '#B83B5E',
                 margin: 20,
               }}
               onPress={() => {
                 setModalVisible(false);
               }}>
-              <Text style={{color: 'black', fontWeight: 'bold'}}>Close</Text>
+              <FontAwesomeIcon name="close" size={35} color="black" />
             </TouchableOpacity>
           </SafeAreaView>
         </Modal>
