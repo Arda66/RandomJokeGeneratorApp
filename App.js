@@ -5,6 +5,7 @@ import {
   FlatList,
   Modal,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   ToastAndroid,
@@ -254,87 +255,93 @@ const App = () => {
         alignItems: 'center',
         backgroundColor: '#ebd2b4',
       }}>
-      <Text
-        onLongPress={() => {
-          Alert.alert(
-            'Joke',
-            text,
-            [
-              {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-              },
-              {
-                text: 'Copy',
-                onPress: () => {
-                  ToastAndroid.show('Copied to clipboard.', ToastAndroid.SHORT);
-                  Clipboard.setString(text);
+      <ScrollView
+        style={{flex: 1, width: '92%', marginVertical: 10, top: '2%'}}>
+        <Text
+          onLongPress={() => {
+            Alert.alert(
+              'Joke',
+              text,
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
                 },
-              },
-            ],
-            {cancelable: false},
-          );
-        }}
-        style={{
-          fontWeight: 'bold',
-          color: 'black',
-          width: '88%',
-          height: '40%',
-          fontSize: 22,
-          letterSpacing: 1,
-          lineHeight: 32,
-          top: '2%',
-        }}>
-        {text}
-      </Text>
-      <TouchableOpacity
-        style={[styles.button, {backgroundColor: '#f1c40f'}]}
-        onPress={() => {
-          RandomGenerator();
-        }}>
-        <Text style={{color: 'black', fontWeight: 'bold'}}>Generate</Text>
-        <FontAwesome5Icon name="random" size={30} color="black" />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.button, {backgroundColor: '#acecf7'}]}
-        onPress={() => {
-          AddItem();
-        }}>
-        <Text style={{color: 'black', fontWeight: 'bold', bottom: 1}}>
-          Save to registry
-        </Text>
-        <FontAwesomeIcon name="save" size={30} color="black" />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.button, {backgroundColor: '#BCF7C9'}]}
-        onPress={() => {
-          if (text.length > 0) {
-            ShareMessage(text);
-          } else Alert.alert('Warning', 'Please generate a joke first.');
-        }}>
-        <Text
-          style={{color: 'black', fontWeight: 'bold', margin: 2, bottom: 2}}>
-          Share
-        </Text>
-        <EntypoIcon name="share" size={30} color="black" />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.button, {backgroundColor: '#f4989c'}]}
-        onPress={() => {
-          setModalVisible(true);
-        }}>
-        <Text
+                {
+                  text: 'Copy',
+                  onPress: () => {
+                    ToastAndroid.show(
+                      'Copied to clipboard.',
+                      ToastAndroid.SHORT,
+                    );
+                    Clipboard.setString(text);
+                  },
+                },
+              ],
+              {cancelable: false},
+            );
+          }}
           style={{
-            color: 'black',
             fontWeight: 'bold',
-            marginVertical: 5,
-            bottom: 5,
+            color: 'black',
+            fontSize: 22,
+            letterSpacing: 1,
+            lineHeight: 32,
+            top: '2%',
           }}>
-          Registry
+          {text}
         </Text>
-        <FontAwesome5Icon name="history" size={25} color="black" />
-      </TouchableOpacity>
+      </ScrollView>
+      <View style={{flex: 0.8, top: '1%'}}>
+        <TouchableOpacity
+          style={[styles.button, {backgroundColor: '#f1c40f'}]}
+          onPress={() => {
+            RandomGenerator();
+          }}>
+          <Text style={{color: 'black', fontWeight: 'bold'}}>Generate</Text>
+          <FontAwesome5Icon name="random" size={30} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, {backgroundColor: '#acecf7'}]}
+          onPress={() => {
+            AddItem();
+          }}>
+          <Text style={{color: 'black', fontWeight: 'bold', bottom: 1}}>
+            Save to registry
+          </Text>
+          <FontAwesomeIcon name="save" size={30} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, {backgroundColor: '#BCF7C9'}]}
+          onPress={() => {
+            if (text.length > 0) {
+              ShareMessage(text);
+            } else Alert.alert('Warning', 'Please generate a joke first.');
+          }}>
+          <Text
+            style={{color: 'black', fontWeight: 'bold', margin: 2, bottom: 2}}>
+            Share
+          </Text>
+          <EntypoIcon name="share" size={30} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, {backgroundColor: '#f4989c'}]}
+          onPress={() => {
+            setModalVisible(true);
+          }}>
+          <Text
+            style={{
+              color: 'black',
+              fontWeight: 'bold',
+              marginVertical: 5,
+              bottom: 5,
+            }}>
+            Registry
+          </Text>
+          <FontAwesome5Icon name="history" size={25} color="black" />
+        </TouchableOpacity>
+      </View>
       <RegistryModal style={{flex: 1}} />
     </SafeAreaView>
   );
