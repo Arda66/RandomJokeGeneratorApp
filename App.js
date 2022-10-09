@@ -190,6 +190,7 @@ const App = () => {
         justifyContent: 'center',
         alignItems: 'center',
         marginVertical: 10,
+        backgroundColor: '#F5F5F5',
       }}>
       <Text
         onLongPress={() => {
@@ -216,11 +217,12 @@ const App = () => {
         style={{
           fontWeight: 'bold',
           color: 'black',
-          width: '90%',
+          width: '88%',
           height: '40%',
           fontSize: 22,
           letterSpacing: 1,
           lineHeight: 32,
+          top: '2%',
         }}>
         {text}
       </Text>
@@ -229,9 +231,7 @@ const App = () => {
         onPress={() => {
           RandomGenerator();
         }}>
-        <Text style={{color: 'black', fontWeight: 'bold'}}>
-          Generate Random Joke
-        </Text>
+        <Text style={{color: 'black', fontWeight: 'bold'}}>Generate</Text>
         <FontAwesome5Icon name="random" size={30} color="black" />
       </TouchableOpacity>
       <TouchableOpacity
@@ -268,7 +268,9 @@ const App = () => {
       <TouchableOpacity
         style={[styles.button, {backgroundColor: 'green'}]}
         onPress={() => {
-          ShareMessage();
+          if (text.length > 0) {
+            ShareMessage();
+          } else Alert.alert('Warning', 'Please generate a joke first.');
         }}>
         <Text
           style={{color: 'black', fontWeight: 'bold', margin: 2, bottom: 2}}>
