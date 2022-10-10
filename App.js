@@ -205,7 +205,46 @@ const App = () => {
         },
       });
       if (response.data.results.length > 0) {
-        setText(response.data.results[0].joke);
+        const RandomJoke =
+          response.data.results[
+            parseInt(Math.random() * response.data.results.length)
+          ].joke;
+        if ((response.data.results.length = 1)) {
+          setText(RandomJoke);
+        } else {
+          while (RandomJoke == text) {
+            RandomJoke =
+              response.data.results[
+                parseInt(Math.random() * response.data.results.length)
+              ].joke;
+          }
+          setText(RandomJoke);
+        }
+      } else {
+        Alert.alert('Warning', 'No joke found.');
+      }
+    } else {
+      Alert.alert('Warning', 'Please enter a search term.');
+    }
+  };
+  const JokeList = async () => {
+    if (SearchText.length > 0) {
+      const response = await axios.get(`${BaseURL}search?term=${SearchText}`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+      if (response.data.results.length > 0) {
+        var finalText = '';
+        for (i = 0; i < response.data.results.length; i++) {
+          const tempText = response.data.results[i].joke;
+          finalText = finalText + '\n' + (i + 1) + '-)' + ' ' + tempText;
+        }
+        const jokeCount =
+          '\t\t\t\t\t\t\t\t\t' +
+          response.data.results.length +
+          ' JOKE FOUND!\n';
+        setText(jokeCount + `(word : ${SearchText})\n` + finalText);
       } else {
         Alert.alert('Warning', 'No joke found.');
       }
@@ -316,7 +355,6 @@ const App = () => {
             fontSize: 23,
             letterSpacing: 1,
             lineHeight: 40,
-            top: '2%',
           }}>
           {text}
         </Text>
@@ -351,37 +389,81 @@ const App = () => {
               borderWidth: 1,
               borderColor: 'black',
             }}></TextInput>
-          <TouchableOpacity
+          <View
             style={{
-              height: 75,
-              width: 120,
-              borderRadius: 15,
-              backgroundColor: '#afd1fa',
-              justifyContent: 'center',
-              alignItems: 'center',
-              top: '10%',
-            }}
-            onPress={() => {
-              SearchJoke();
-              setSearchText('');
-              Keyboard.dismiss();
+              flexDirection: 'row',
+              bottom: '5%',
             }}>
-            <Text
+            <TouchableOpacity
               style={{
-                color: 'black',
-                fontWeight: 'bold',
-                fontSize: 20,
-                top: '5%',
+                height: 75,
+                width: 120,
+                borderRadius: 15,
+                backgroundColor: '#afd1fa',
+                justifyContent: 'center',
+                alignItems: 'center',
+                top: '8%',
+                elevation: 3,
+                marginHorizontal: 10,
+              }}
+              onPress={() => {
+                SearchJoke();
+                setSearchText('');
+                Keyboard.dismiss();
               }}>
-              Search
-            </Text>
-            <FontAwesomeIcon
-              style={{margin: 10, bottom: '5%'}}
-              name="search"
-              size={28}
-              color="black"
-            />
-          </TouchableOpacity>
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: 'bold',
+                  fontSize: 22,
+                  top: '5%',
+                }}>
+                Search
+              </Text>
+              <FontAwesomeIcon
+                style={{margin: 10, bottom: '5%'}}
+                name="search"
+                size={28}
+                color="black"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                height: 75,
+                width: 120,
+                borderRadius: 15,
+                backgroundColor: '#afd1fa',
+                justifyContent: 'center',
+                alignItems: 'center',
+                top: '8%',
+                elevation: 3,
+                marginHorizontal: 15,
+              }}
+              onPress={() => {
+                JokeList();
+                setSearchText('');
+                Keyboard.dismiss();
+              }}>
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: 'bold',
+                  fontSize: 24,
+                  bottom: '9%',
+                }}>
+                Search
+              </Text>
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: 'bold',
+                  fontSize: 20,
+                  bottom: '5%',
+                }}>
+                (All list)
+              </Text>
+            </TouchableOpacity>
+          </View>
         </KeyboardAvoidingView>
         <View
           style={{
