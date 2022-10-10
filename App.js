@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {
   Alert,
   FlatList,
+  Keyboard,
   KeyboardAvoidingView,
   Modal,
   SafeAreaView,
@@ -329,15 +330,20 @@ const App = () => {
             width: '100%',
           }}>
           <TextInput
+            minWidth="100%"
+            maxWidth="100%"
             numberOfLines={1}
             placeholder="Type your search term here..."
+            placeholderTextColor="black"
             value={SearchText}
             onChangeText={text => {
               setSearchText(text);
             }}
             style={{
+              color: 'black',
               minWidth: '90%',
               maxWidth: '90%',
+              minHeight: 40,
               backgroundColor: 'white',
               borderRadius: 10,
               marginVertical: 10,
@@ -346,15 +352,34 @@ const App = () => {
               borderColor: 'black',
             }}></TextInput>
           <TouchableOpacity
+            style={{
+              height: 75,
+              width: 120,
+              borderRadius: 15,
+              backgroundColor: '#afd1fa',
+              justifyContent: 'center',
+              alignItems: 'center',
+              top: '10%',
+            }}
             onPress={() => {
               SearchJoke();
               setSearchText('');
+              Keyboard.dismiss();
             }}>
+            <Text
+              style={{
+                color: 'black',
+                fontWeight: 'bold',
+                fontSize: 20,
+                top: '5%',
+              }}>
+              Search
+            </Text>
             <FontAwesomeIcon
-              style={{left: '40%', bottom: '155%', padding: 2}}
+              style={{margin: 10, bottom: '5%'}}
               name="search"
               size={28}
-              color="blue"
+              color="black"
             />
           </TouchableOpacity>
         </KeyboardAvoidingView>
