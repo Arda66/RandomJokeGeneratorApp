@@ -29,7 +29,7 @@ const App = () => {
   const [ModalVisible, setModalVisible] = useState(false);
   const [Registry, setRegistry] = useState([]);
   const [ExtraData, setExtraData] = useState(false);
-
+  const [isClickable, setisClickable] = useState(true);
   const GetData = async () => {
     try {
       await AsyncStorage.getItem('RegistryArray').then(value => {
@@ -196,6 +196,7 @@ const App = () => {
       },
     });
     setText(response.data.joke);
+    setisClickable(true);
   };
   const SearchJoke = async () => {
     if (SearchText.length > 0) {
@@ -220,6 +221,7 @@ const App = () => {
           }
           setText(RandomJoke);
         }
+        setisClickable(true);
       } else {
         Alert.alert('Warning', 'No joke found.');
       }
@@ -245,6 +247,7 @@ const App = () => {
           response.data.results.length +
           ' JOKE FOUND!\n';
         setText(jokeCount + `(word : ${SearchText})\n` + finalText);
+        setisClickable(false);
       } else {
         Alert.alert('Warning', 'No joke found.');
       }
@@ -372,7 +375,7 @@ const App = () => {
             maxWidth="100%"
             numberOfLines={1}
             placeholder="Type your search term here..."
-            placeholderTextColor="black"
+            placeholderTextColor="gray"
             value={SearchText}
             onChangeText={text => {
               setSearchText(text);
@@ -460,7 +463,7 @@ const App = () => {
                   fontSize: 20,
                   bottom: '5%',
                 }}>
-                (All list)
+                (All List)
               </Text>
             </TouchableOpacity>
           </View>
@@ -484,12 +487,14 @@ const App = () => {
             <FontAwesome5Icon name="random" size={30} color="black" />
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.button, {backgroundColor: '#acecf7', left: '15%'}]}
+            style={[styles.button, {backgroundColor: '#acecf7', left: '10%'}]}
             onPress={() => {
-              AddItem();
+              isClickable
+                ? AddItem()
+                : Alert.alert('Warning!', 'List can not be saved.');
             }}>
             <Text style={{color: 'black', fontWeight: 'bold', bottom: 1}}>
-              Save to registry
+              Save to Registry
             </Text>
             <FontAwesomeIcon name="save" size={30} color="black" />
           </TouchableOpacity>
@@ -502,7 +507,10 @@ const App = () => {
             marginVertical: 30,
           }}>
           <TouchableOpacity
-            style={[styles.button, {backgroundColor: '#BCF7C9', right: '15%'}]}
+            style={[
+              styles.button,
+              {backgroundColor: '#BCF7C9', right: '15%', bottom: '5%'},
+            ]}
             onPress={() => {
               if (text.length > 0) {
                 ShareMessage(text);
@@ -520,7 +528,10 @@ const App = () => {
             <EntypoIcon name="share" size={30} color="black" />
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.button, {backgroundColor: '#f4989c', left: '15%'}]}
+            style={[
+              styles.button,
+              {backgroundColor: '#f4989c', left: '11%', bottom: '5%'},
+            ]}
             onPress={() => {
               setModalVisible(true);
             }}>
@@ -551,6 +562,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginVertical: 20,
     padding: 15,
+    elevation: 3,
+    shadowColor: 'black',
+    shadowOffset: {width: 20, height: 20},
+    shadowOpacity: 1,
+    shadowRadius: 5,
   },
 });
 
