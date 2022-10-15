@@ -6,6 +6,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Modal,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -13,6 +14,7 @@ import {
   TextInput,
   ToastAndroid,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import Share from 'react-native-share';
@@ -85,7 +87,6 @@ const App = () => {
       [
         {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         {
@@ -123,7 +124,6 @@ const App = () => {
               [
                 {
                   text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
                   style: 'cancel',
                 },
                 {
@@ -335,7 +335,6 @@ const App = () => {
               [
                 {
                   text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
                   style: 'cancel',
                 },
                 {
@@ -362,193 +361,202 @@ const App = () => {
           {text}
         </Text>
       </ScrollView>
-      <View style={{flex: 0.3, top: '1%'}}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-          }}>
-          <TextInput
-            minWidth="100%"
-            maxWidth="100%"
-            numberOfLines={1}
-            placeholder="Type your search term here..."
-            placeholderTextColor="gray"
-            value={SearchText}
-            onChangeText={text => {
-              setSearchText(text);
-            }}
+      <TouchableWithoutFeedback
+        style={{flex: 1}}
+        onPress={() => {
+          Keyboard.dismiss();
+        }}>
+        <View style={{flex: 1.4}}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={{
-              color: 'black',
-              minWidth: '90%',
-              maxWidth: '90%',
-              minHeight: 40,
-              backgroundColor: 'white',
-              borderRadius: 10,
-              marginVertical: 10,
-              elevation: 3,
-              borderWidth: 1,
-              borderColor: 'black',
-            }}></TextInput>
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+            }}>
+            <TextInput
+              minWidth="100%"
+              maxWidth="100%"
+              numberOfLines={1}
+              placeholder="Type your search term here..."
+              placeholderTextColor="gray"
+              value={SearchText}
+              onChangeText={text => {
+                setSearchText(text);
+              }}
+              style={{
+                color: 'black',
+                minWidth: '90%',
+                maxWidth: '90%',
+                minHeight: 40,
+                backgroundColor: 'white',
+                borderRadius: 10,
+                marginVertical: 10,
+                elevation: 3,
+                borderWidth: 1,
+                borderColor: 'black',
+              }}></TextInput>
+            <View
+              style={{
+                flexDirection: 'row',
+                bottom: '5%',
+              }}>
+              <TouchableOpacity
+                style={{
+                  height: 75,
+                  width: 120,
+                  borderRadius: 15,
+                  backgroundColor: '#afd1fa',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  top: '8%',
+                  elevation: 3,
+                  marginHorizontal: 10,
+                }}
+                onPress={() => {
+                  SearchJoke();
+                  setSearchText('');
+                  Keyboard.dismiss();
+                }}>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontWeight: 'bold',
+                    fontSize: 22,
+                    top: '5%',
+                  }}>
+                  Search
+                </Text>
+                <FontAwesomeIcon
+                  style={{margin: 10, bottom: '5%'}}
+                  name="search"
+                  size={28}
+                  color="black"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  height: 75,
+                  width: 120,
+                  borderRadius: 15,
+                  backgroundColor: '#afd1fa',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  top: '8%',
+                  elevation: 3,
+                  marginHorizontal: 15,
+                }}
+                onPress={() => {
+                  JokeList();
+                  setSearchText('');
+                  Keyboard.dismiss();
+                }}>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontWeight: 'bold',
+                    fontSize: 24,
+                    bottom: '9%',
+                  }}>
+                  Search
+                </Text>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontWeight: 'bold',
+                    fontSize: 20,
+                    bottom: '5%',
+                  }}>
+                  (All List)
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
           <View
             style={{
               flexDirection: 'row',
-              bottom: '5%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginVertical: 20,
+              top: '5%',
             }}>
             <TouchableOpacity
-              style={{
-                height: 75,
-                width: 120,
-                borderRadius: 15,
-                backgroundColor: '#afd1fa',
-                justifyContent: 'center',
-                alignItems: 'center',
-                top: '8%',
-                elevation: 3,
-                marginHorizontal: 10,
-              }}
+              style={[
+                styles.button,
+                {backgroundColor: '#f1c40f', right: '15%'},
+              ]}
               onPress={() => {
-                SearchJoke();
-                setSearchText('');
-                Keyboard.dismiss();
+                RandomGenerator();
               }}>
-              <Text
-                style={{
-                  color: 'black',
-                  fontWeight: 'bold',
-                  fontSize: 22,
-                  top: '5%',
-                }}>
-                Search
+              <Text style={{color: 'black', fontWeight: 'bold'}}>
+                Random Generate
               </Text>
-              <FontAwesomeIcon
-                style={{margin: 10, bottom: '5%'}}
-                name="search"
-                size={28}
-                color="black"
-              />
+              <FontAwesome5Icon name="random" size={30} color="black" />
             </TouchableOpacity>
             <TouchableOpacity
-              style={{
-                height: 75,
-                width: 120,
-                borderRadius: 15,
-                backgroundColor: '#afd1fa',
-                justifyContent: 'center',
-                alignItems: 'center',
-                top: '8%',
-                elevation: 3,
-                marginHorizontal: 15,
-              }}
+              style={[styles.button, {backgroundColor: '#acecf7', left: '10%'}]}
               onPress={() => {
-                JokeList();
-                setSearchText('');
-                Keyboard.dismiss();
+                isClickable
+                  ? AddItem()
+                  : Alert.alert('Warning!', 'List can not be saved.');
               }}>
-              <Text
-                style={{
-                  color: 'black',
-                  fontWeight: 'bold',
-                  fontSize: 24,
-                  bottom: '9%',
-                }}>
-                Search
+              <Text style={{color: 'black', fontWeight: 'bold', bottom: 1}}>
+                Save to Registry
               </Text>
-              <Text
-                style={{
-                  color: 'black',
-                  fontWeight: 'bold',
-                  fontSize: 20,
-                  bottom: '5%',
-                }}>
-                (All List)
-              </Text>
+              <FontAwesomeIcon name="save" size={30} color="black" />
             </TouchableOpacity>
           </View>
-        </KeyboardAvoidingView>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginVertical: 20,
-            top: '5%',
-          }}>
-          <TouchableOpacity
-            style={[styles.button, {backgroundColor: '#f1c40f', right: '15%'}]}
-            onPress={() => {
-              RandomGenerator();
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginVertical: 30,
             }}>
-            <Text style={{color: 'black', fontWeight: 'bold'}}>
-              Random Generate
-            </Text>
-            <FontAwesome5Icon name="random" size={30} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, {backgroundColor: '#acecf7', left: '10%'}]}
-            onPress={() => {
-              isClickable
-                ? AddItem()
-                : Alert.alert('Warning!', 'List can not be saved.');
-            }}>
-            <Text style={{color: 'black', fontWeight: 'bold', bottom: 1}}>
-              Save to Registry
-            </Text>
-            <FontAwesomeIcon name="save" size={30} color="black" />
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginVertical: 30,
-          }}>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              {backgroundColor: '#BCF7C9', right: '15%', bottom: '5%'},
-            ]}
-            onPress={() => {
-              if (text.length > 0) {
-                ShareMessage(text);
-              } else Alert.alert('Warning', 'Please generate a joke first.');
-            }}>
-            <Text
-              style={{
-                color: 'black',
-                fontWeight: 'bold',
-                margin: 2,
-                bottom: 2,
+            <TouchableOpacity
+              style={[
+                styles.button,
+                {backgroundColor: '#BCF7C9', right: '15%', bottom: '5%'},
+              ]}
+              onPress={() => {
+                text.length > 0
+                  ? ShareMessage(text)
+                  : Alert.alert('Warning', 'Please generate a joke first.');
               }}>
-              Share
-            </Text>
-            <EntypoIcon name="share" size={30} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              {backgroundColor: '#f4989c', left: '11%', bottom: '5%'},
-            ]}
-            onPress={() => {
-              setModalVisible(true);
-            }}>
-            <Text
-              style={{
-                color: 'black',
-                fontWeight: 'bold',
-                marginVertical: 5,
-                bottom: 5,
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: 'bold',
+                  margin: 2,
+                  bottom: 2,
+                }}>
+                Share
+              </Text>
+              <EntypoIcon name="share" size={30} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                {backgroundColor: '#f4989c', left: '11%', bottom: '5%'},
+              ]}
+              onPress={() => {
+                setModalVisible(true);
               }}>
-              Registry
-            </Text>
-            <FontAwesome5Icon name="history" size={25} color="black" />
-          </TouchableOpacity>
+              <Text
+                style={{
+                  color: 'black',
+                  fontWeight: 'bold',
+                  marginVertical: 5,
+                  bottom: 5,
+                }}>
+                Registry
+              </Text>
+              <FontAwesome5Icon name="history" size={25} color="black" />
+            </TouchableOpacity>
+          </View>
+          <RegistryModal style={{flex: 1}} />
         </View>
-      </View>
-      <RegistryModal style={{flex: 1}} />
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };
