@@ -35,9 +35,7 @@ const App = () => {
   const GetData = async () => {
     try {
       await AsyncStorage.getItem('RegistryArray').then(value => {
-        if (value !== null) {
-          setRegistry(JSON.parse(value));
-        }
+        value && setRegistry(JSON.parse(value));
       });
     } catch (error) {
       console.log(error);
@@ -190,11 +188,16 @@ const App = () => {
     );
   };
   const RandomGenerator = async () => {
-    const response = await axios.get(`${BaseURL}`, {
-      headers: {
-        Accept: 'application/json',
-      },
-    });
+    const response = await axios
+      .get(`${BaseURL}`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
     setText(response.data.joke);
     setisClickable(true);
   };
@@ -288,6 +291,19 @@ const App = () => {
               extraData={ExtraData}
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
+              ListEmptyComponent={() => {
+                return (
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: 'black',
+                      fontSize: 24,
+                      paddingTop: 50,
+                    }}>
+                    No saved jokes. Start to save...
+                  </Text>
+                );
+              }}
             />
             <TouchableOpacity
               style={{
@@ -322,7 +338,7 @@ const App = () => {
         style={{
           flex: 1,
           width: '92%',
-          marginVertical: 10,
+          margin: 10,
           borderColor: 'gray',
           elevation: 3,
           paddingHorizontal: 10,
@@ -354,9 +370,10 @@ const App = () => {
           style={{
             fontWeight: 'bold',
             color: 'black',
-            fontSize: 23,
+            fontSize: 21,
             letterSpacing: 1,
             lineHeight: 40,
+            paddingLeft: 5,
           }}>
           {text}
         </Text>
@@ -375,6 +392,7 @@ const App = () => {
               width: '100%',
             }}>
             <TextInput
+              autoCapitalize="none"
               minWidth="100%"
               maxWidth="100%"
               numberOfLines={1}
