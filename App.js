@@ -62,9 +62,9 @@ const App = () => {
   };
   const AddItem = async () => {
     if (text.length > 0) {
-      if (Registry.includes(text)) {
+      if (Registry.includes(text))
         Alert.alert('Warning', 'This joke is already saved in the registry.');
-      } else {
+      else {
         const temp = Registry;
         temp.push(text);
         setRegistry(temp);
@@ -78,6 +78,7 @@ const App = () => {
       }
     } else Alert.alert('Warning', 'Please generate a joke first.');
   };
+
   const DeleteItem = index => {
     Alert.alert(
       'Delete',
@@ -104,6 +105,26 @@ const App = () => {
       {cancelable: false},
     );
   };
+  const Copy = () => {
+    Alert.alert(
+      'Joke',
+      item,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Copy',
+          onPress: () => {
+            ToastAndroid.show('Copied to clipboard.', ToastAndroid.SHORT);
+            Clipboard.setString(text);
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };
   const renderItem = ({item, index}) => {
     return (
       <View
@@ -116,27 +137,7 @@ const App = () => {
         }}>
         <Text
           onLongPress={() => {
-            Alert.alert(
-              'Joke',
-              item,
-              [
-                {
-                  text: 'Cancel',
-                  style: 'cancel',
-                },
-                {
-                  text: 'Copy',
-                  onPress: () => {
-                    ToastAndroid.show(
-                      'Copied to clipboard.',
-                      ToastAndroid.SHORT,
-                    );
-                    Clipboard.setString(text);
-                  },
-                },
-              ],
-              {cancelable: false},
-            );
+            Copy();
           }}
           style={{
             fontSize: 20,
@@ -202,7 +203,7 @@ const App = () => {
     setisClickable(true);
   };
   const SearchJoke = async () => {
-    if (SearchText.length > 0) {
+    if (SearchText.trim().length > 0) {
       const response = await axios.get(`${BaseURL}search?term=${SearchText}`, {
         headers: {
           Accept: 'application/json',
@@ -233,7 +234,7 @@ const App = () => {
     }
   };
   const JokeList = async () => {
-    if (SearchText.length > 0) {
+    if (SearchText.trim().length > 0) {
       const response = await axios.get(`${BaseURL}search?term=${SearchText}`, {
         headers: {
           Accept: 'application/json',
