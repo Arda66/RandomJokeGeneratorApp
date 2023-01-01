@@ -12,8 +12,6 @@
 ![image](https://user-images.githubusercontent.com/61588522/197395418-5f843706-29c3-4174-8e1a-2dbf51619f9d.png)
 
 # Pressing Save to Registry<br>
-![image](https://user-images.githubusercontent.com/61588522/197395456-b570e3af-dab3-4d2b-929e-9c8c87639ee2.png)
-
 ![image](https://user-images.githubusercontent.com/61588522/197395492-454c170b-4be8-4239-97b4-504813945b9f.png)
 
 # Registry<br>
